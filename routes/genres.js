@@ -1,5 +1,21 @@
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
+
+mongoose
+  .connect(
+    "mongodb://localhost/vidly",
+    { useNewUrlParser: true }
+  )
+  .then(() => console.log("Connected to MongoDB..."))
+  .catch(err => console.error("Couldn't connect to MongoDB ", err));
+
+const genreSchema = new mongoose.schema({
+  name: String
+});
+
+const Genre = mongoose.model("Genre", genreSchema);
+
 const genres = [
   { id: 0, name: "Action" },
   { id: 1, name: "Drama" },
