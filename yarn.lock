@@ -1347,7 +1347,7 @@ mongoose@4.12.3:
     regexp-clone "0.0.1"
     sliced "1.0.1"
 
-mongoose@^5.3.15:
+mongoose@^5.2.8:
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.4.0.tgz#78e784a38aab8552c07ef336a342aa75a413c463"
   integrity sha512-pFKa6askJ6xwZT6mWuYBwa2R9ryd1+JrXUhKuAUxEGrUMTi8ADcJC/RgBg4fZ1lL6VPVVChsc9wpVn4X6gcWlg==
