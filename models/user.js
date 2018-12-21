@@ -3,30 +3,40 @@ const Joi = require("joi");
 Joi.objectId = require("joi-objectid")(Joi);
 const PasswordComplexity = require("joi-password-complexity");
 
-const User = mongoose.model(
-  "User",
-  new mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      minlength: 2,
-      maxlength: 50
-    },
-    email: {
-      type: String,
-      unique: true,
-      required: true,
-      minlength: 6,
-      maxlength: 255
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 6,
-      maxlength: 1024
-    }
-  })
-);
+const jwt = require("jsonwebtoken");
+const config = require("config");
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 50
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+    minlength: 6,
+    maxlength: 255
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 6,
+    maxlength: 1024
+  },
+  isAdmin: Boolean
+});
+
+userSchema.methods.generateAuthToken = function() {
+  return jwt.sign(
+    { _id: this._id, isAdmin: this.isAdmin },
+    config.get("jwtPrivateKey")
+  );
+};
+
+const User = mongoose.model("User", userSchema);
 
 function validateUser(user) {
   const schema = {
@@ -39,14 +49,10 @@ function validateUser(user) {
       .min(6)
       .max(255)
       .email(),
-    password: Joi.validate(
-      user.password,
-      new PasswordComplexity(),
-      (err, value) => {
-        if (err) return err.message;
-        return value;
-      }
-    )
+    password: Joi.string()
+      .required()
+      .min(6)
+      .max(255)
   };
   return Joi.validate(user, schema);
 }
