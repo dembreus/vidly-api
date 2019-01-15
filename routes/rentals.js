@@ -42,11 +42,18 @@ router.post("/", async (req, res) => {
   try {
     new Fawn.Task()
       .save("rentals", rental)
-      .update("movies", { _id: movie._id }, { $inc: { numberInStock: -1 } })
+      .update(
+        "movies",
+        { _id: movie._id },
+        {
+          $inc: { numberInStock: -1 }
+        }
+      )
       .run();
+
     res.send(rental);
   } catch (ex) {
-    res.status(500).send(ex.details[0].message);
+    res.status(500).send("Something failed.");
   }
 });
 
