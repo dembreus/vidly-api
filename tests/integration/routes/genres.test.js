@@ -4,13 +4,13 @@ const { Genre } = require("../../../models/genre");
 const { User } = require("../../../models/user");
 
 describe("/api/genres", () => {
-  let server;
+  let server = require("../../../index");
 
   beforeEach(() => {
     server = require("../../../index");
   });
   afterEach(async () => {
-    server.close();
+    await server.close();
     await Genre.remove({});
   });
 
